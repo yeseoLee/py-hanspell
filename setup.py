@@ -17,7 +17,7 @@ def install():
         long_description=desc,
         author="SuHun Han",
         author_email="ssut@ssut.me",
-        url="https://github.com/ssut/py-hanspell",
+        url="https://github.com/yeseoLee/py-hanspell",
         classifiers=[
             "Development Status :: 5 - Production/Stable",
             "Intended Audience :: Education",

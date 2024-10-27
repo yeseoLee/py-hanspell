@@ -1,11 +1,12 @@
-# py-hanspell
+# py-hanspell 원본 라이브러리와 차이점
 
-[![Build Status](https://travis-ci.org/ssut/py-hanspell.svg?branch=master)](https://travis-ci.org/ssut/py-hanspell)
-[![PyPI version](https://badge.fury.io/py/py-hanspell.svg)](http://badge.fury.io/py/py-hanspell)
-
-py-hanspell은 네이버 맞춤법 검사기를 이용한 파이썬용 한글 맞춤법 검사 라이브러리입니다.
-
-파이썬 2.7 및 3.4 모두 호환됩니다.
+[py-hanspell](https://github.com/ssut/py-hanspell)은 네이버 맞춤법 검사기를 이용한 파이썬용 한글 맞춤법 검사 라이브러리입니다.  
+해당 라이브러리가 더이상 유지되지 않아 fork하여 passportKey 에러를 해결한 버전 입니다.  
+- Black Formatter를 적용하였습니다.  
+- token.py의 `TokenManager` 클래스를 통해 passportKey를 가져옵니다.  
+- spell_checker.py의 `check()`함수가 KeyError를 except하여 `update_token()`을 호출하고 `check()`함수를 재시도합니다.  
+  (재시도에서는 KeyError를 except하지 않고 그대로 발생합니다.)  
+- 최대 글자수가 500자에서 300자로 줄어든 것을 반영했습니다.
 
 ---
 
@@ -17,7 +18,7 @@ py-hanspell은 네이버 맞춤법 검사기를 이용한 파이썬용 한글 �
 커맨드 라인에 다음 명령어를 입력하시면 자동으로 설치가 진행됩니다
 
 ```bash
-$ pip install py-hanspell
+$ pip install git+https://github.com/yeseoLee/py-hanspell#egg=py-hanspell
 ```
 
 다음으로 이 GitHub 저장소에서 직접 내려받아 설치하는 방법입니다. 이 저장소를 로컬에 clone 하거나 우측에 보이는 메뉴에서 zip 파일로 다운받은 후에 로컬 커맨드 라인에

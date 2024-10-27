@@ -14,9 +14,28 @@ from . import __version__
 from .response import Checked
 from .constants import base_url
 from .constants import CheckResult
+from .token import TokenManager
 
 _agent = requests.Session()
 PY3 = sys.version_info[0] == 3
+
+# 싱글톤 패턴
+_token_manager = None
+
+
+def get_token_manager():
+    global _token_manager
+    if _token_manager is None:
+        _token_manager = TokenManager()
+    return _token_manager
+
+
+def read_token():
+    return get_token_manager().read_token()
+
+
+def update_token():
+    return get_token_manager().update_token()
 
 
 def _remove_tags(text):
@@ -29,7 +48,7 @@ def _remove_tags(text):
     return result
 
 
-def check(text):
+def check(text, retry=True):
     """
     매개변수로 입력받은 한글 문장의 맞춤법을 체크합니다.
     """
@@ -44,7 +63,9 @@ def check(text):
     if len(text) > 500:
         return Checked(result=False)
 
-    payload = {"color_blindness": "0", "q": text}
+    TOKEN = read_token()
+
+    payload = {"passportKey": TOKEN, "color_blindness": "0", "q": text}
 
     headers = {
         "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36",
@@ -56,7 +77,14 @@ def check(text):
     passed_time = time.time() - start_time
 
     data = json.loads(r.text)
-    html = data["message"]["result"]["html"]
+    try:
+        html = data["message"]["result"]["html"]
+    except KeyError:
+        update_token()
+        print("KeyError가 발생하여 passfortKey를 갱신합니다.")
+        if retry:
+            return check(text, False)
+
     result = {
         "result": True,
         "original": text,

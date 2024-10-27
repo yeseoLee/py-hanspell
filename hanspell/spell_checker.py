@@ -59,8 +59,8 @@ def check(text, retry=True):
             result.append(checked)
         return result
 
-    # 최대 500자까지 가능.
-    if len(text) > 500:
+    # 최대 300자까지 가능.
+    if len(text) > 300:
         return Checked(result=False)
 
     TOKEN = read_token()
